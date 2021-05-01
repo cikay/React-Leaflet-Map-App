@@ -4,17 +4,13 @@ import SearchLocation from './SearchLocation'
 
 function Home() {
   return (
-    <Row>
-      <Col sm={2}></Col>
+    <Row className='mt-3'>
       <Col xs={12} sm={8}>
-        <div className='mt-5'>
-          <SearchLocation />
-          <div className='mt-5'>
-            <Map />
-          </div>
-        </div>
+        <Map />
       </Col>
-      <Col sm={2}></Col>
+      <Col sm={4}>
+        <SearchLocation />
+      </Col>
     </Row>
   )
 }

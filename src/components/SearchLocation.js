@@ -16,21 +16,23 @@ const getCityNames = () => {
 }
 export default function SearchLocation() {
   const [selected, setSelected] = useState()
-  const [location, setLocation] = useState()
+  const [location, setLocation] = useState(true)
+
   const cityNames = useMemo(() => {
     return getCityNames()
   }, [])
-  useEffect(() => {}, [])
+
   const handleChange = (e) => {
     const { id, value } = e.target
     setLocation((prevLocation) => ({ ...prevLocation, [id]: value }))
   }
   return (
-    <div className='d-flex justify-content-between'>
-      <div className='d-flex'>
+    <div className='mr-3'>
+      <div className='d-flex justify-content-end'>
         <FormControl
           as='select'
           style={{ width: '10rem' }}
+          className='mr-sm-2'
           onChange={(e) => {
             console.log('muzaffer', e.target.value)
             setSelected(e.target.value)
@@ -43,7 +45,7 @@ export default function SearchLocation() {
             <option key={index}>{city}</option>
           ))}
         </FormControl>
-        <FormControl as='select' className='ml-2' style={{ width: '10rem' }}>
+        <FormControl as='select' className='mr-sm-2' style={{ width: '10rem' }}>
           <option disabled selected hidden>
             İlçe
           </option>
@@ -54,33 +56,43 @@ export default function SearchLocation() {
             })}
         </FormControl>
       </div>
-      <div>
-        <Form inline>
-          <FormControl
-            type='text'
-            inputMode='latitude'
-            required
-            placeholder='Enlem'
-            className='mr-sm-2'
-            onChange={handleChange}
-          />
-          <FormControl
-            type='text'
-            id='longitude'
-            required
-            placeholder='Boylam'
-            className='mr-sm-2'
-            onChange={handleChange}
-          />
-          <Button variant='outline-success' type='submit'>
-            Search
+      <div className='mt-3'>
+        <Form>
+          <div className='d-flex justify-content-end'>
+            <FormControl
+              type='text'
+              inputMode='latitude'
+              required
+              placeholder='Enlem'
+              className='mr-sm-2'
+              onChange={handleChange}
+              style={{ width: '10rem' }}
+            />
+            <FormControl
+              type='text'
+              id='longitude'
+              required
+              placeholder='Boylam'
+              className='mr-sm-2'
+              onChange={handleChange}
+              style={{ width: '10rem' }}
+            />
+          </div>
+          <Button
+            className='mt-2 mr-2 float-right'
+            variant='outline-success'
+            type='submit'
+          >
+            Ara
           </Button>
         </Form>
-        <div className='mt-2 float-right'>
-          <CustomizedCard
-            items={[{ city: 'Urfa', county: 'hilvan', distance: 10 }]}
-          />
-        </div>
+        {location && (
+          <div className='mt-5'>
+            <CustomizedCard
+              items={[{ city: 'Urfa', county: 'hilvan', distance: 10 }]}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
