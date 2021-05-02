@@ -8,8 +8,9 @@ const withUnit = (distance) => {
   return `${distance} Metre`
 }
 
-export default function CustomizedCard({ items }) {
+export default function CustomizedCard({ items, setSelectedLocation }) {
   console.log('items', items)
+
   return (
     <div>
       <Card style={{ width: '18rem' }}>
@@ -18,9 +19,17 @@ export default function CustomizedCard({ items }) {
         </Card.Body>
         <ListGroup className='list-group-flush'>
           {items.map((item, index) => (
-            <ListGroupItem key={index}>{`${item.county} ${withUnit(
-              item.distance
-            )}`}</ListGroupItem>
+            <ListGroupItem
+              onClick={() => {
+                setSelectedLocation({
+                  lat: item.centerLat,
+                  lng: item.centerLon,
+                })
+                console.log()
+              }}
+              action
+              key={index}
+            >{`${item.county} ${withUnit(item.distance)}`}</ListGroupItem>
           ))}
         </ListGroup>
       </Card>

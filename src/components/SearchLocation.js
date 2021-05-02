@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Form, FormControl, Button } from 'react-bootstrap'
 import Data from '../data/cities'
-import CustomizedCard from './CustomizedCard'
-import { LatLng } from 'leaflet'
-import { getUniqueItems, reAssign, isIncludes } from '../utility'
+import { getLowestDistance } from '../utility'
 import InputField from './InputField'
 
-export default function SearchLocation() {
+export default function SearchLocation({
+  location,
+  setLocation,
+  setLowestDistances,
+  children,
+  uniqueCities,
+}) {
   const [selected, setSelected] = useState()
-  const [location, setLocation] = useState({ lat: '', lng: '' })
-  const [lowestDistances, setLowestDistances] = useState()
+
   const [error, setError] = useState()
-  const uniqueCities = useMemo(() => {
-    return getUniqueItems(Data, 'city')
-  }, [])
 
   const handleChange = (e) => {
     const { id, value } = e.target
@@ -27,44 +27,7 @@ export default function SearchLocation() {
       setLowestDistances()
       return
     }
-
-    const { lat, lng } = location
-    console.log('location', location)
-    const latLng = new LatLng(lat, lng)
-    let distances = []
-
-    const lowestLocationCount = 3
-    const uniqueCounties = getUniqueItems(Data, 'county')
-    console.log('Data', Data)
-    console.log('uniqueCounties', uniqueCounties)
-    for (const item of uniqueCounties) {
-      if ('ŞEMDİNLİ' === item.county) {
-        console.log(item.county)
-      }
-    }
-    let i = 0
-    for (; i < lowestLocationCount; i++) {
-      const item = uniqueCounties[i]
-      console.log('item first 3', item)
-
-      const distance = latLng.distanceTo({
-        lat: item.centerLat,
-        lng: item.centerLon,
-      })
-      distances.push({ ...item, distance })
-    }
-    console.log('distances', distances)
-    for (; i < uniqueCities.length; i++) {
-      const item = uniqueCities[i]
-      const { centerLat, centerLon } = item
-      const distance = latLng.distanceTo({
-        lat: centerLat,
-        lng: centerLon,
-      })
-
-      reAssign(distances, { ...item, distance })
-    }
-
+    const distances = getLowestDistance(location, uniqueCities)
     setLowestDistances(distances)
     console.log(distances)
   }
@@ -132,12 +95,8 @@ export default function SearchLocation() {
             Ara
           </Button>
         </Form>
-        {lowestDistances && (
-          <div className='mt-5'>
-            <CustomizedCard items={lowestDistances} />
-          </div>
-        )}
       </div>
+      {children}
     </div>
   )
 }

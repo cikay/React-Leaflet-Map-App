@@ -1,8 +1,7 @@
 import React from 'react'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import {} from '@react-leaflet/core'
+import { MapContainer, TileLayer } from 'react-leaflet'
 
-export default function Map() {
+export default function Map({ children }) {
   return (
     <MapContainer
       center={[39.2, 35]}
@@ -14,6 +13,7 @@ export default function Map() {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
+      {children}
     </MapContainer>
   )
 }
