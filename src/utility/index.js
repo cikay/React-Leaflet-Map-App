@@ -46,17 +46,7 @@ export function getLowestDistance(location, uniqueCities) {
   console.log('Data', Data)
   console.log('uniqueCounties', uniqueCounties)
 
-  let i = 0
-  for (; i < lowestLocationCount; i++) {
-    const item = uniqueCounties[i]
-
-    const distance = latLng.distanceTo({
-      lat: item.centerLat,
-      lng: item.centerLon,
-    })
-    distances.push({ ...item, distance })
-  }
-  for (; i < uniqueCities.length; i++) {
+  for (const i in uniqueCities) {
     const item = uniqueCities[i]
     const { centerLat, centerLon } = item
     const distance = latLng.distanceTo({
@@ -64,7 +54,11 @@ export function getLowestDistance(location, uniqueCities) {
       lng: centerLon,
     })
 
-    reAssign(distances, { ...item, distance })
+    if (i < lowestLocationCount) {
+      distances.push({ ...item, distance })
+    } else {
+      reAssign(distances, { ...item, distance })
+    }
   }
 
   return distances
